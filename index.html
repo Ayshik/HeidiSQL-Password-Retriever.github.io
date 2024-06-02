@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Get HeidiSQL Saved Password</title>
+
+	<!-- Google font -->
+	<link href="http://fonts.googleapis.com/css?family=Playfair+Display:900" rel="stylesheet" type="text/css" />
+	<link href="http://fonts.googleapis.com/css?family=Alice:400,700" rel="stylesheet" type="text/css" />
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="css/style.css" />
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style>
+
+	</style>
+</head>
+
+<body>
+	<div id="booking" class="section">
+		<div class="section-center">
+			<div class="container">
+				<div class="row">
+					<div class="booking-form">
+						<div class="booking-bg">
+							<div class="form-header">
+								<h2>Get HeidiSQL Saved Password</h2>
+								<p>
+								<ul>
+									<li><code>Open HeidiSQL and select File &gt; Export Settings to dump settings into a text file.</code>
+									</li><br>
+									<li><code>Open the text file and search for Servers\["Your Saved Configuration name"]\Password.</code>
+									</li><br>
+									<li><code>Copy and paste the encoded password from the HeidiSQL settings file into the Encoded password Field and Hit Next.</code>
+									</li>
+								</ul>
+								</p>
+								<div class="footer">
+									<p>Developed by -<a href="https://github.com/Ayshik" target="_blank"><strong><code>Md Wali Mosnad
+											Ayshik</code></strong></a></p>
+								</div>
+							</div>
+						</div>
+						<form id="passwordRetrieveForm">
+							<h2>HeidiSQL Password Retrieve</h2>
+							<div class="form-group">
+								<label for="encryptedPassword">Encrypted Password</label>
+								<input class="form-control" type="password" id="encryptedPassword" required>
+							</div>
+							<div class="form-btn" id="follow">
+								<h3>Follow MD WALI MOSNAD AYSHIK on GitHub to unlock the password Feature</h3>
+								<button type="button" class="submit-btn" id="followButton">Follow</button>
+							</div>
+							<div class="form-btn" id="retrieveButton">
+								<h3>❤️❤️❤️Thanks For Flowing MD WALI MOSNAD AYSHIK on GitHub❤️❤️❤️</h3>
+								<button type="button" class="submit-btn">Retrieve Password</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<script>
+		$(document).ready(function () {
+			// Hide the "Retrieve Password" button initially
+			$('#retrieveButton').hide();
+		});
+
+		// Function to handle the follow button click
+		$('#followButton').on('click', function () {
+			// Perform actions to follow on GitHub
+			// For demonstration purposes, you can redirect the user to your GitHub profile
+			var githubProfile = 'https://github.com/Ayshik';
+			window.open(githubProfile, '_blank');
+
+			// After the user clicks follow, set followsGitHub to true and show the "Retrieve Password" button
+			var followsGitHub = true; // Set to true assuming the user follows, you should implement actual logic here
+			if (followsGitHub) {
+				$('#follow').hide();
+				$('#retrieveButton').show();
+			}
+		});
+
+		// Call retrievePassword() when the "Retrieve Password" button is clicked
+		document.getElementById('retrieveButton').addEventListener('click', retrievePassword);
+
+		// Rest of your JavaScript code remains unchanged
+		function retrievePassword() {
+			var encryptedPassword = document.getElementById('encryptedPassword').value;
+
+			var decryptedPassword = heidiDecode(encryptedPassword);
+
+			Swal.fire({
+				title: 'Decrypted Password',
+				text: decryptedPassword,
+				icon: 'success',
+				showCancelButton: false,
+				confirmButtonText: 'Copy Password',
+			}).then((result) => {
+				if (result.isConfirmed) {
+					// Copy password to clipboard
+					var tempInput = document.createElement('input');
+					tempInput.value = decryptedPassword;
+					document.body.appendChild(tempInput);
+					tempInput.select();
+					document.execCommand('copy');
+					document.body.removeChild(tempInput);
+					Swal.fire('Copied!', 'Password has been copied to clipboard', 'success');
+				}
+			});
+		}
+
+		// HeidiDecode function
+		function heidiDecode(hex) {
+			var str = '';
+			var shift = parseInt(hex.substr(-1));
+			hex = hex.substr(0, hex.length - 1);
+			for (var i = 0; i < hex.length; i += 2)
+				str += String.fromCharCode(parseInt(hex.substr(i, 2), 16) - shift);
+			return str;
+		}
+	</script>
+</body>
+
+</html>
